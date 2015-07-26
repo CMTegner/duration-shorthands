@@ -1,0 +1,29 @@
+{
+  "name": "duration-shorthands",
+  "version": "1.0.0",
+  "description": "Convert duration shorthands into milliseconds",
+  "main": "index.js",
+  "scripts": {
+    "test": "babel-node test.js | faucet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CMTegner/duration-shorthands.git"
+  },
+  "keywords": [
+    "abbreviation",
+    "duration",
+    "shorthand"
+  ],
+  "author": "Christian Tegnér <christian.tegner@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CMTegner/duration-shorthands/issues"
+  },
+  "homepage": "https://github.com/CMTegner/duration-shorthands#readme",
+  "devDependencies": {
+    "babel": "^5.8.5",
+    "faucet": "0.0.1",
+    "tape": "^4.0.1"
+  }
+}
