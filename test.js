@@ -21,3 +21,10 @@ test('convert simple shorthands to milliseconds', t => {
     t.end();
 });
 
+test('error on unrecognised shorthand', t => {
+    t.throws(() => convert('foo'), /Unrecognised shorthand: foo/);
+    t.throws(() => convert('x'), /Unrecognised shorthand: x/);
+    t.throws(() => convert('42S'), /Unrecognised shorthand: 42S/);
+    t.end();
+});
+
