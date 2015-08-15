@@ -1,4 +1,4 @@
-const matcher = /([0-9]*)(ms|s|m|h|d|w|M|y)/;
+const matcher = /([0-9]+)(ms|s|m|h|d|w|M|y)/;
 const mapper = {
     ms: 1,
     s: 1000,
