@@ -54,3 +54,20 @@ test('inline replace standalone shorthands', t => {
     t.end();
 });
 
+test('pass millis, amount, and unit through an optional callback before inline replacing', t => {
+    replace('5s', (millis, amount, unit) => {
+        t.equals(millis, 5000);
+        t.equals(amount, 5);
+        t.equals(unit, 's');
+    });
+    let sum = 0;
+    replace('9m59s and 1s is 10m', millis => {
+        sum += millis;
+        return millis;
+    });
+    t.equals(sum, 1200000);
+    const estimateify = (millis, amount, unit) => `${amount}w`;
+    t.equals(replace('it\'ll take 2d to complete', estimateify), 'it\'ll take 2w to complete');
+    t.end();
+});
+

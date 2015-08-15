@@ -2,6 +2,7 @@ const expr = '([0-9]+)(ms|s|m|h|d|w|M|y)';
 const matcher = new RegExp(`^(${expr})+$`);
 const replacer = new RegExp(expr, 'g');
 const inline = new RegExp(`\\b(${expr})+\\b`, 'g');
+const identity = v => v;
 const mapper = {
     ms: 1,
     s: 1000,
@@ -29,7 +30,7 @@ export default shorthand => {
     }
 }
 
-export function replace(str) {
-    return str.replace(inline, convert);
+export function replace(str, cb = identity) {
+    return str.replace(inline, (match, _, num, unit) => cb(convert(match), parseInt(num, 10), unit));
 }
 
