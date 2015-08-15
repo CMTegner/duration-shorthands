@@ -1,5 +1,5 @@
 import test from 'tape';
-import convert from '.';
+import convert, { replace } from '.';
 
 test('convert simple shorthands to milliseconds', t => {
     t.equal(convert('42ms'), 42);
@@ -43,6 +43,14 @@ test('error on unrecognised shorthand', t => {
     t.throws(() => convert('foo'), /Unrecognised shorthand: foo/);
     t.throws(() => convert('x'), /Unrecognised shorthand: x/);
     t.throws(() => convert('42S'), /Unrecognised shorthand: 42S/);
+    t.end();
+});
+
+test('inline replace standalone shorthands', t => {
+    t.equals(replace('1w + 3m - 2s'), '604800000 + 180000 - 2000');
+    t.equals(replace('9m59s and 1s is 10m'), '599000 and 1000 is 600000');
+    t.equals(replace('I\'ve drunk 99bottles of rum in 1w'), 'I\'ve drunk 99bottles of rum in 604800000');
+    t.equals(replace('foo500msbar'), 'foo500msbar');
     t.end();
 });
 
