@@ -1,4 +1,6 @@
-const matcher = /([0-9]+)(ms|s|m|h|d|w|M|y)/;
+const expr = '([0-9]+)(ms|s|m|h|d|w|M|y)';
+const matcher = new RegExp(`^(${expr})+$`);
+const replacer = new RegExp(expr, 'g');
 const mapper = {
     ms: 1,
     s: 1000,
@@ -11,10 +13,12 @@ const mapper = {
 };
 
 export default shorthand => {
-    const match = matcher.exec(shorthand);
-    if (match) {
-        const [,num,unit] = match;
-        return (parseInt(num, 10) || 1) * mapper[unit];
+    if (matcher.test(shorthand)) {
+        let sum = 0;
+        shorthand.replace(replacer, (match, num, unit) => {
+            sum += parseInt(num, 10) * mapper[unit];
+        });
+        return sum;
     } else {
         throw new Error(`Unrecognised shorthand: ${shorthand}`);
     }

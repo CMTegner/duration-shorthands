@@ -13,6 +13,20 @@ test('convert simple shorthands to milliseconds', t => {
     t.end();
 });
 
+test('convert compound shorthands', t => {
+    t.equal(convert('42h30m'), 153000000);
+    t.equal(convert('42h30m15s'), 153015000);
+    t.equal(convert('2w1s'), 1209601000);
+    t.end();
+});
+
+test('fail on compound shorthands containing at least one invalid shorthand', t => {
+    t.throws(() => convert('2w1xs'), /Unrecognised shorthand: 2w1xs/);
+    t.throws(() => convert('2x1s'), /Unrecognised shorthand: 2x1s/);
+    t.throws(() => convert('2S1S'), /Unrecognised shorthand: 2S1S/);
+    t.end();
+});
+
 test('error on shorthand with no amount', t => {
     t.throws(() => convert('ms'), /Unrecognised shorthand: ms/);
     t.throws(() => convert('s'), /Unrecognised shorthand: s/);
