@@ -14,23 +14,28 @@ const mapper = {
     y: 365 * 24 * 60 * 60 * 1000
 };
 
-function convert(shorthand) {
-    let sum = 0;
-    shorthand.replace(replacer, (match, num, unit) => {
-        sum += parseInt(num, 10) * mapper[unit];
-    });
-    return sum;
+function parse(shorthand) {
+    const parts = [];
+    shorthand.replace(replacer, (match, num, unit) => parts.push([parseInt(num, 10), unit]));
+    return parts;
+}
+
+function toMillis(parts) {
+    return parts.reduce((millis, [amount, unit]) => millis + (amount * mapper[unit]), 0);
 }
 
 export default shorthand => {
     if (matcher.test(shorthand)) {
-        return convert(shorthand);
+        return toMillis(parse(shorthand));
     } else {
         throw new Error(`Unrecognised shorthand: ${shorthand}`);
     }
 }
 
 export function replace(str, cb = identity) {
-    return str.replace(inline, (match, _, num, unit) => cb(convert(match), parseInt(num, 10), unit));
+    return str.replace(inline, match => {
+        const parts = parse(match);
+        return cb(toMillis(parts), parts);
+    });
 }
 

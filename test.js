@@ -46,7 +46,7 @@ test('error on unrecognised shorthand', t => {
     t.end();
 });
 
-test('inline replace standalone shorthands', t => {
+test('inline replace standalone shorthands with corresponding millisecond amount', t => {
     t.equals(replace('1w + 3m - 2s'), '604800000 + 180000 - 2000');
     t.equals(replace('1h+30m-75m=?'), '3600000+1800000-4500000=?');
     t.equals(replace('9m59s and 1s is 10m'), '599000 and 1000 is 600000');
@@ -55,19 +55,18 @@ test('inline replace standalone shorthands', t => {
     t.end();
 });
 
-test('pass millis, amount, and unit through an optional callback before inline replacing', t => {
-    replace('5s', (millis, amount, unit) => {
-        t.equals(millis, 5000);
-        t.equals(amount, 5);
-        t.equals(unit, 's');
+test('pass millis and the parsed parts that make up the shorthand through an optional callback before inline replacing whatever the callback returns', t => {
+    replace('42m5s', (millis, parts) => {
+        t.equals(millis, 2525000);
+        t.equals(parts[0][0], 42);
+        t.equals(parts[0][1], 'm');
+        t.equals(parts[1][0], 5);
+        t.equals(parts[1][1], 's');
     });
     let sum = 0;
-    replace('9m59s and 1s is 10m', millis => {
-        sum += millis;
-        return millis;
-    });
+    replace('9m59s and 1s is 10m', millis => sum += millis);
     t.equals(sum, 1200000);
-    const estimateify = (millis, amount, unit) => `${amount}w`;
+    const estimateify = (_, [[amount]]) => `${amount}w`;
     t.equals(replace('it\'ll take 2d to complete', estimateify), 'it\'ll take 2w to complete');
     t.end();
 });
