@@ -4,7 +4,7 @@
   "description": "Convert duration shorthands into milliseconds",
   "main": "index.js",
   "scripts": {
-    "test": "babel-node --stage=0 test.js | faucet"
+    "test": "standard && babel-node --stage=0 test.js | faucet"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "babel": "^5.8.5",
     "faucet": "0.0.1",
+    "standard": "^5.1.0",
     "tape": "^4.0.1"
   }
 }
