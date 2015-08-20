@@ -48,6 +48,7 @@ test('error on unrecognised shorthand', t => {
 
 test('inline replace standalone shorthands', t => {
     t.equals(replace('1w + 3m - 2s'), '604800000 + 180000 - 2000');
+    t.equals(replace('1h+30m-75m=?'), '3600000+1800000-4500000=?');
     t.equals(replace('9m59s and 1s is 10m'), '599000 and 1000 is 600000');
     t.equals(replace('I\'ve drunk 99bottles of rum in 1w'), 'I\'ve drunk 99bottles of rum in 604800000');
     t.equals(replace('foo500msbar'), 'foo500msbar');
