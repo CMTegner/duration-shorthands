@@ -45,8 +45,8 @@ export function replace (str, cb = identity) {
 }
 
 export function format (millis) {
-  let result = ''
-  for (let i = 0, rest = millis; rest; i++) {
+  let result = millis < 0 ? '-' : ''
+  for (let i = 0, rest = Math.abs(millis); rest; i++) {
     const [amount, unit] = amounts[i]
     const c = Math.floor(rest / amount)
     if (c < 1) continue

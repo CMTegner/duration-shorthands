@@ -75,6 +75,7 @@ test('format a millisecond count as a duration shorthand', t => {
   t.equals(format(420000), '7m')
   t.equals(format(1468800000), '2w3d')
   t.equals(format(1468800001), '2w3d1ms')
+  t.equals(format(-1468800001), '-2w3d1ms')
   t.end()
 })
 
