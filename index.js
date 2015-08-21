@@ -19,7 +19,7 @@ for (let unit in mapper) {
 }
 amounts.sort(([a], [b]) => b - a) // Descending order
 
-function parse (shorthand) {
+function _parse (shorthand) {
   const parts = []
   shorthand.replace(replacer, (match, num, unit) => parts.push([parseInt(num, 10), unit]))
   return parts
@@ -29,9 +29,9 @@ function toMillis (parts) {
   return parts.reduce((millis, [amount, unit]) => millis + (amount * mapper[unit]), 0)
 }
 
-export default shorthand => {
+export function parse (shorthand) {
   if (matcher.test(shorthand)) {
-    return toMillis(parse(shorthand))
+    return toMillis(_parse(shorthand))
   } else {
     throw new Error(`Unrecognised shorthand: ${shorthand}`)
   }
@@ -39,7 +39,7 @@ export default shorthand => {
 
 export function replace (str, cb = identity) {
   return str.replace(inline, match => {
-    const parts = parse(match)
+    const parts = _parse(match)
     return cb(toMillis(parts), parts)
   })
 }
