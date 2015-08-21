@@ -4,12 +4,14 @@
   "description": "Convert duration shorthands into milliseconds",
   "main": "transpiled.js",
   "scripts": {
+    "doc": "npm run transpile && jsdoc -d doc transpiled.js && open doc/index.html",
     "transpile": "babel --stage=0 -s true -o transpiled.js index.js",
     "prepublish": "npm run transpile",
-    "test": "standard  && babel-node --stage=0 test.js | faucet"
+    "test": "standard && babel-node --stage=0 test.js | faucet"
   },
   "standard": {
     "ignore": [
+      "doc/**",
       "transpiled.js"
     ]
   },
@@ -31,6 +33,7 @@
   "devDependencies": {
     "babel": "^5.8.5",
     "faucet": "0.0.1",
+    "jsdoc": "^3.3.2",
     "standard": "^5.1.0",
     "tape": "^4.0.1"
   }
