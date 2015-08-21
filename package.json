@@ -2,9 +2,16 @@
   "name": "duration-shorthands",
   "version": "1.0.0",
   "description": "Convert duration shorthands into milliseconds",
-  "main": "index.js",
+  "main": "transpiled.js",
   "scripts": {
-    "test": "standard && babel-node --stage=0 test.js | faucet"
+    "transpile": "babel --stage=0 -s true -o transpiled.js index.js",
+    "prepublish": "npm run transpile",
+    "test": "standard  && babel-node --stage=0 test.js | faucet"
+  },
+  "standard": {
+    "ignore": [
+      "transpiled.js"
+    ]
   },
   "repository": {
     "type": "git",
