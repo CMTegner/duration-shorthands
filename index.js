@@ -21,12 +21,12 @@ amounts.sort(([a], [b]) => b - a) // Descending order
 
 function _parse (shorthand) {
   const parts = []
-  shorthand.replace(replacer, (match, num, unit) => parts.push([parseInt(num, 10), unit]))
+  shorthand.replace(replacer, (match, num, unit) => parts.push({ amount: parseInt(num, 10), unit }))
   return parts
 }
 
 function toMillis (parts) {
-  return parts.reduce((millis, [amount, unit]) => millis + (amount * mapper[unit]), 0)
+  return parts.reduce((millis, { amount, unit }) => millis + (amount * mapper[unit]), 0)
 }
 
 export function parse (shorthand) {

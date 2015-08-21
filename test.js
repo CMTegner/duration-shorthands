@@ -58,15 +58,13 @@ test('inline replace standalone shorthands with corresponding millisecond amount
 test('pass millis and the parsed parts that make up the shorthand through an optional callback before inline replacing whatever the callback returns', t => {
   replace('42m5s', (millis, parts) => {
     t.equals(millis, 2525000)
-    t.equals(parts[0][0], 42)
-    t.equals(parts[0][1], 'm')
-    t.equals(parts[1][0], 5)
-    t.equals(parts[1][1], 's')
+    t.deepEqual(parts[0], { amount: 42, unit: 'm' })
+    t.deepEqual(parts[1], { amount: 5, unit: 's' })
   })
   let sum = 0
   replace('9m59s and 1s is 10m', millis => sum += millis)
   t.equals(sum, 1200000)
-  const estimateify = (_, [[amount]]) => `${amount}w`
+  const estimateify = (_, [{ amount }]) => `${amount}w`
   t.equals(replace('it\'ll take 2d to complete', estimateify), 'it\'ll take 2w to complete')
   t.end()
 })
