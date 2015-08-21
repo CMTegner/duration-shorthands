@@ -1,5 +1,5 @@
 import test from 'tape'
-import convert, { replace } from '.'
+import convert, { replace, format } from '.'
 
 test('convert simple shorthands to milliseconds', t => {
   t.equal(convert('42ms'), 42)
@@ -68,6 +68,13 @@ test('pass millis and the parsed parts that make up the shorthand through an opt
   t.equals(sum, 1200000)
   const estimateify = (_, [[amount]]) => `${amount}w`
   t.equals(replace('it\'ll take 2d to complete', estimateify), 'it\'ll take 2w to complete')
+  t.end()
+})
+
+test('format a millisecond count as a duration shorthand', t => {
+  t.equals(format(420000), '7m')
+  t.equals(format(1468800000), '2w3d')
+  t.equals(format(1468800001), '2w3d1ms')
   t.end()
 })
 

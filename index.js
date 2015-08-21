@@ -13,6 +13,11 @@ const mapper = {
   M: 30 * 24 * 60 * 60 * 1000, // Note: assumes 30 days in a month
   y: 365 * 24 * 60 * 60 * 1000
 }
+const amounts = []
+for (let unit in mapper) {
+  amounts.push([mapper[unit], unit])
+}
+amounts.sort(([a], [b]) => b - a) // Descending order
 
 function parse (shorthand) {
   const parts = []
@@ -37,5 +42,17 @@ export function replace (str, cb = identity) {
     const parts = parse(match)
     return cb(toMillis(parts), parts)
   })
+}
+
+export function format (millis) {
+  let result = ''
+  for (let i = 0, rest = millis; rest; i++) {
+    const [amount, unit] = amounts[i]
+    const c = Math.floor(rest / amount)
+    if (c < 1) continue
+    result += c + unit
+    rest = rest % amount
+  }
+  return result
 }
 
