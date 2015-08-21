@@ -29,6 +29,12 @@ function toMillis (parts) {
   return parts.reduce((millis, { amount, unit }) => millis + (amount * mapper[unit]), 0)
 }
 
+/**
+ * Convert a duration shorthand into milliseconds.
+ *
+ * @param {String} shorthand the duration shorthand to evaluate
+ * @returns {Number} the amount of milliseconds the shorthand spans
+ */
 export function parse (shorthand) {
   if (matcher.test(shorthand)) {
     return toMillis(_parse(shorthand))
@@ -37,6 +43,12 @@ export function parse (shorthand) {
   }
 }
 
+/**
+ * Perform inline replacement of shorthand instances in a string.
+ *
+ * @param {String} str the string to evaluate
+ * @param {replaceCallback} [cb] the callback which is invoked for each shorthand. The return value is used as the replacement. The default replacement value is the shorthand's millisecond count.
+ */
 export function replace (str, cb = identity) {
   return str.replace(inline, match => {
     const parts = _parse(match)
@@ -44,6 +56,23 @@ export function replace (str, cb = identity) {
   })
 }
 
+/**
+ * Invoked by `replace` for each shorthand instance in a string.
+ *
+ * @callback replaceCallback
+ * @param {Number} millis the amount of milliseconds the shorthand spans
+ * @param {Object[]} parts an array of the (amount, unit) pairs that make up the shorthand
+ * @param {Number} parts[].amount the part's amount
+ * @param {String} parts[].unit the part's unit
+ * @returns {*} a value which will be cast to a String and used as the shorthand's replacement
+ */
+
+/**
+ * Format a millisecond count as a duration shorthand.
+ *
+ * @param {Number} millis the millisecond count to format
+ * @returns {String} a duration shorthand
+ */
 export function format (millis) {
   let result = millis < 0 ? '-' : ''
   for (let i = 0, rest = Math.abs(millis); rest; i++) {
