@@ -1,5 +1,5 @@
 import test from 'tape'
-import { parse, replace, format } from '.'
+import { parse, replace, format } from './index.js'
 
 test('parse simple shorthands to milliseconds', t => {
   t.equal(parse('42ms'), 42)
