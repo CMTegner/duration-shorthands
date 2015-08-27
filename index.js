@@ -3,7 +3,7 @@ const matcher = new RegExp(`^(${expr})+$`)
 const replacer = new RegExp(expr, 'g')
 const inline = new RegExp(`\\b(${expr})+\\b`, 'g')
 const identity = v => v
-const mapper = {
+const units = {
   ms: 1,
   s: 1000,
   m: 60 * 1000,
@@ -14,8 +14,8 @@ const mapper = {
   y: 365 * 24 * 60 * 60 * 1000
 }
 const amounts = []
-for (let unit in mapper) {
-  amounts.push([mapper[unit], unit])
+for (let unit in units) {
+  amounts.push([units[unit], unit])
 }
 amounts.sort(([a], [b]) => b - a) // Descending order
 
@@ -26,7 +26,7 @@ function _parse (shorthand) {
 }
 
 function toMillis (parts) {
-  return parts.reduce((millis, { amount, unit }) => millis + (amount * mapper[unit]), 0)
+  return parts.reduce((millis, { amount, unit }) => millis + (amount * units[unit]), 0)
 }
 
 /**
