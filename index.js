@@ -1,5 +1,5 @@
 const identity = v => v
-const units = {}
+let units
 let amounts
 let matcher
 let replacer
@@ -8,6 +8,7 @@ let inline
 init()
 
 function init () {
+  units = {}
   _setUnit('ms', 1)
   _setUnit('s', 1000)
   _setUnit('m', 60 * 1000)
@@ -105,4 +106,6 @@ export function setUnit (unit, millis) {
   _setUnit(unit, millis)
   compilePatterns()
 }
+
+export { init as reset }
 

@@ -1,5 +1,5 @@
 import test from 'tape'
-import { parse, replace, format, setUnit } from './index.js'
+import { parse, replace, format, setUnit, reset } from './index.js'
 
 test('parse simple shorthands to milliseconds', t => {
   t.equal(parse('42ms'), 42)
@@ -100,6 +100,14 @@ test('let substring units and their parents live side by side', t => {
   t.equals(parse('2hrs'), 7200000)
   t.equals(parse('1h2hrs'), 10800000)
   t.equals(parse('2hrs42h'), 158400000)
+  t.end()
+})
+
+test('reset returns module to its initial state', t => {
+  setUnit('hrs', 60 * 60 * 1000)
+  t.equals(parse('2hrs'), 7200000)
+  reset()
+  t.throws(() => parse('2hrs'), /Unrecognised shorthand: 2hrs/)
   t.end()
 })
 
