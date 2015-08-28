@@ -2,6 +2,7 @@ import test from 'tape'
 import { parse, replace, format, setUnit, reset } from './index.js'
 
 test('parse simple shorthands to milliseconds', t => {
+  reset()
   t.equal(parse('42ms'), 42)
   t.equal(parse('123s'), 123000)
   t.equal(parse('9m'), 540000)
@@ -14,6 +15,7 @@ test('parse simple shorthands to milliseconds', t => {
 })
 
 test('parse compound shorthands', t => {
+  reset()
   t.equal(parse('42h30m'), 153000000)
   t.equal(parse('42h30m15s'), 153015000)
   t.equal(parse('2w1s'), 1209601000)
@@ -21,6 +23,7 @@ test('parse compound shorthands', t => {
 })
 
 test('fail on compound shorthands containing at least one invalid shorthand', t => {
+  reset()
   t.throws(() => parse('2w1xs'), /Unrecognised shorthand: 2w1xs/)
   t.throws(() => parse('2x1s'), /Unrecognised shorthand: 2x1s/)
   t.throws(() => parse('2S1S'), /Unrecognised shorthand: 2S1S/)
@@ -28,6 +31,7 @@ test('fail on compound shorthands containing at least one invalid shorthand', t 
 })
 
 test('error on shorthand with no amount', t => {
+  reset()
   t.throws(() => parse('ms'), /Unrecognised shorthand: ms/)
   t.throws(() => parse('s'), /Unrecognised shorthand: s/)
   t.throws(() => parse('m'), /Unrecognised shorthand: m/)
@@ -40,6 +44,7 @@ test('error on shorthand with no amount', t => {
 })
 
 test('error on unrecognised shorthand', t => {
+  reset()
   t.throws(() => parse('foo'), /Unrecognised shorthand: foo/)
   t.throws(() => parse('x'), /Unrecognised shorthand: x/)
   t.throws(() => parse('42S'), /Unrecognised shorthand: 42S/)
@@ -47,6 +52,7 @@ test('error on unrecognised shorthand', t => {
 })
 
 test('inline replace standalone shorthands with corresponding millisecond amount', t => {
+  reset()
   t.equals(replace('1w + 3m - 2s'), '604800000 + 180000 - 2000')
   t.equals(replace('1h+30m-75m=?'), '3600000+1800000-4500000=?')
   t.equals(replace('9m59s and 1s is 10m'), '599000 and 1000 is 600000')
@@ -56,6 +62,7 @@ test('inline replace standalone shorthands with corresponding millisecond amount
 })
 
 test('pass millis and the parsed parts that make up the shorthand through an optional callback before inline replacing whatever the callback returns', t => {
+  reset()
   replace('42m5s', (millis, parts) => {
     t.equals(millis, 2525000)
     t.deepEqual(parts[0], { amount: 42, unit: 'm' })
@@ -70,6 +77,7 @@ test('pass millis and the parsed parts that make up the shorthand through an opt
 })
 
 test('format a millisecond count as a duration shorthand', t => {
+  reset()
   t.equals(format(420000), '7m')
   t.equals(format(1468800000), '2w3d')
   t.equals(format(1468800001), '2w3d1ms')
@@ -78,6 +86,7 @@ test('format a millisecond count as a duration shorthand', t => {
 })
 
 test('define new units', t => {
+  reset()
   setUnit('f', 14 * 24 * 60 * 60 * 1000)
   t.equals(parse('3f'), 3 * 14 * 24 * 60 * 60 * 1000)
   setUnit('Q', 91 * 24 * 60 * 60 * 1000)
@@ -88,6 +97,7 @@ test('define new units', t => {
 })
 
 test('redefine existing units', t => {
+  reset()
   setUnit('d', 8 * 60 * 60 * 1000)
   setUnit('w', 40 * 60 * 60 * 1000)
   setUnit('y', 1700 * 60 * 60 * 1000)
@@ -96,6 +106,7 @@ test('redefine existing units', t => {
 })
 
 test('let substring units and their parents live side by side', t => {
+  reset()
   setUnit('hrs', 60 * 60 * 1000)
   t.equals(parse('2hrs'), 7200000)
   t.equals(parse('1h2hrs'), 10800000)
@@ -104,6 +115,7 @@ test('let substring units and their parents live side by side', t => {
 })
 
 test('reset returns module to its initial state', t => {
+  reset()
   setUnit('hrs', 60 * 60 * 1000)
   t.equals(parse('2hrs'), 7200000)
   reset()
