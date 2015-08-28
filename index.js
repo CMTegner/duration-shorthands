@@ -18,6 +18,7 @@ function init () {
   _setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
   _setUnit('y', 365 * 24 * 60 * 60 * 1000)
   compilePatterns()
+  compileFormatUnits()
 }
 
 function _setUnit (unit, millis) {
@@ -25,15 +26,17 @@ function _setUnit (unit, millis) {
 }
 
 function compilePatterns () {
-  const keys = Object.keys(units)
-  amounts = keys // TODO: Remove dups (aliases)
-    .map(unit => [units[unit], unit])
-    .sort(([a], [b]) => b - a) // Descending order
-  keys.sort((a, b) => b.length - a.length)
+  const keys = Object.keys(units).sort((a, b) => b.length - a.length)
   const expr = `([0-9]+)(${keys.join('|')})`
   matcher = new RegExp(`^(${expr})+$`)
   replacer = new RegExp(expr, 'g')
   inline = new RegExp(`\\b(${expr})+\\b`, 'g')
+}
+
+function compileFormatUnits () {
+  amounts = Object.keys(units) // TODO: Remove dups (aliases)
+    .map(unit => [units[unit], unit])
+    .sort(([a], [b]) => b - a) // Descending order
 }
 
 function _parse (shorthand) {
@@ -105,6 +108,7 @@ export function format (millis) {
 export function setUnit (unit, millis) {
   _setUnit(unit, millis)
   compilePatterns()
+  compileFormatUnits()
 }
 
 export { init as reset }
