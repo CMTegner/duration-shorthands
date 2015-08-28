@@ -5,17 +5,17 @@ let matcher
 let replacer
 let inline
 
-setUnit('ms', 1)
-setUnit('s', 1000)
-setUnit('m', 60 * 1000)
-setUnit('h', 60 * 60 * 1000)
-setUnit('d', 24 * 60 * 60 * 1000)
-setUnit('w', 7 * 24 * 60 * 60 * 1000)
-setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
-setUnit('y', 365 * 24 * 60 * 60 * 1000)
+_setUnit('ms', 1)
+_setUnit('s', 1000)
+_setUnit('m', 60 * 1000)
+_setUnit('h', 60 * 60 * 1000)
+_setUnit('d', 24 * 60 * 60 * 1000)
+_setUnit('w', 7 * 24 * 60 * 60 * 1000)
+_setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
+_setUnit('y', 365 * 24 * 60 * 60 * 1000)
 compilePatterns()
 
-function setUnit (unit, millis) {
+function _setUnit (unit, millis) {
   units[unit] = millis
 }
 
