@@ -8,15 +8,15 @@ let inline
 init()
 
 function init () {
-_setUnit('ms', 1)
-_setUnit('s', 1000)
-_setUnit('m', 60 * 1000)
-_setUnit('h', 60 * 60 * 1000)
-_setUnit('d', 24 * 60 * 60 * 1000)
-_setUnit('w', 7 * 24 * 60 * 60 * 1000)
-_setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
-_setUnit('y', 365 * 24 * 60 * 60 * 1000)
-compilePatterns()
+  _setUnit('ms', 1)
+  _setUnit('s', 1000)
+  _setUnit('m', 60 * 1000)
+  _setUnit('h', 60 * 60 * 1000)
+  _setUnit('d', 24 * 60 * 60 * 1000)
+  _setUnit('w', 7 * 24 * 60 * 60 * 1000)
+  _setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
+  _setUnit('y', 365 * 24 * 60 * 60 * 1000)
+  compilePatterns()
 }
 
 function _setUnit (unit, millis) {
