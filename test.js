@@ -1,5 +1,5 @@
 import test from 'tape'
-import { parse, replace, format } from './index.js'
+import { parse, replace, format, setUnit } from './index.js'
 
 test('parse simple shorthands to milliseconds', t => {
   t.equal(parse('42ms'), 42)
@@ -74,6 +74,32 @@ test('format a millisecond count as a duration shorthand', t => {
   t.equals(format(1468800000), '2w3d')
   t.equals(format(1468800001), '2w3d1ms')
   t.equals(format(-1468800001), '-2w3d1ms')
+  t.end()
+})
+
+test('define new units', t => {
+  setUnit('f', 14 * 24 * 60 * 60 * 1000)
+  t.equals(parse('3f'), 3 * 14 * 24 * 60 * 60 * 1000)
+  setUnit('Q', 91 * 24 * 60 * 60 * 1000)
+  t.equals(parse('3Q'), 3 * 91 * 24 * 60 * 60 * 1000)
+  setUnit('c', 100 * 365 * 24 * 60 * 60 * 1000)
+  t.equals(parse('5c'), 5 * 100 * 365 * 24 * 60 * 60 * 1000)
+  t.end()
+})
+
+test('redefine existing units', t => {
+  setUnit('d', 8 * 60 * 60 * 1000)
+  setUnit('w', 40 * 60 * 60 * 1000)
+  setUnit('y', 1700 * 60 * 60 * 1000)
+  t.equals(parse('2y10w3d'), 3824 * 60 * 60 * 1000)
+  t.end()
+})
+
+test('let substring units and their parents live side by side', t => {
+  setUnit('hrs', 60 * 60 * 1000)
+  t.equals(parse('2hrs'), 7200000)
+  t.equals(parse('1h2hrs'), 10800000)
+  t.equals(parse('2hrs42h'), 158400000)
   t.end()
 })
 

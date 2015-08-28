@@ -97,3 +97,8 @@ export function format (millis) {
   return result
 }
 
+export function setUnit (unit, millis) {
+  _setUnit(unit, millis)
+  compilePatterns()
+}
+
