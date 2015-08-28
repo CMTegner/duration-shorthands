@@ -1,23 +1,35 @@
-const expr = '([0-9]+)(ms|s|m|h|d|w|M|y)'
-const matcher = new RegExp(`^(${expr})+$`)
-const replacer = new RegExp(expr, 'g')
-const inline = new RegExp(`\\b(${expr})+\\b`, 'g')
 const identity = v => v
-const units = {
-  ms: 1,
-  s: 1000,
-  m: 60 * 1000,
-  h: 60 * 60 * 1000,
-  d: 24 * 60 * 60 * 1000,
-  w: 7 * 24 * 60 * 60 * 1000,
-  M: 30 * 24 * 60 * 60 * 1000, // Note: assumes 30 days in a month
-  y: 365 * 24 * 60 * 60 * 1000
+const units = {}
+let amounts
+let matcher
+let replacer
+let inline
+
+setUnit('ms', 1)
+setUnit('s', 1000)
+setUnit('m', 60 * 1000)
+setUnit('h', 60 * 60 * 1000)
+setUnit('d', 24 * 60 * 60 * 1000)
+setUnit('w', 7 * 24 * 60 * 60 * 1000)
+setUnit('M', 30 * 24 * 60 * 60 * 1000) // Note: assumes 30 days in a month
+setUnit('y', 365 * 24 * 60 * 60 * 1000)
+compilePatterns()
+
+function setUnit (unit, millis) {
+  units[unit] = millis
 }
-const amounts = []
-for (let unit in units) {
-  amounts.push([units[unit], unit])
+
+function compilePatterns () {
+  const keys = Object.keys(units)
+  amounts = keys // TODO: Remove dups (aliases)
+    .map(unit => [units[unit], unit])
+    .sort(([a], [b]) => b - a) // Descending order
+  keys.sort((a, b) => b.length - a.length)
+  const expr = `([0-9]+)(${keys.join('|')})`
+  matcher = new RegExp(`^(${expr})+$`)
+  replacer = new RegExp(expr, 'g')
+  inline = new RegExp(`\\b(${expr})+\\b`, 'g')
 }
-amounts.sort(([a], [b]) => b - a) // Descending order
 
 function _parse (shorthand) {
   const parts = []
